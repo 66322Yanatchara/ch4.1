@@ -53,7 +53,8 @@ app.get('/', (_req, res) => {
 });
 
 // Task API (Lab 2.1)
-app.use('/api/tasks', taskRoutes);
+app.use('/api', taskRoutes);
+
 
 // ✅ fallback 404 สำหรับทุก route ที่ไม่ match
 app.use((req, res) => {

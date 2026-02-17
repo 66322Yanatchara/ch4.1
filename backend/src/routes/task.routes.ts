@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
 });
 
 // READ ALL
-router.get('/', async (_req, res) => {
+router.get('/tasks', async (_req, res) => {
   try {
     const tasks = await prisma.task.findMany({
       orderBy: { createdAt: 'desc' },
