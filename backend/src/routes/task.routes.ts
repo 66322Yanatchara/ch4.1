@@ -8,6 +8,7 @@ const router = Router();
 router.post('/', async (req, res) => {
   try {
     const { title, description } = req.body;
+
     if (!title) {
       return res.status(400).json({ message: 'กรุณาระบุ title' });
     }
@@ -17,27 +18,23 @@ router.post('/', async (req, res) => {
     });
 
     res.status(201).json({ data: task });
-  } catch (err) {
-    console.error('CREATE error:', err);
+  } catch (error) {
+    console.error('CREATE error:', error);
     res.status(500).json({ message: 'ไม่สามารถสร้างงานได้' });
   }
 });
 
 // READ ALL
-router.get('/tasks', async (_req, res) => {
+router.get('/', async (_req, res) => {
   try {
     const tasks = await prisma.task.findMany({
       orderBy: { createdAt: 'desc' },
     });
 
     res.json({ data: tasks });
-  } catch (err: any) {
-    console.error('READ ALL error:', err);
-    res.status(500).json({
-      message: 'ไม่สามารถดึงรายการได้',
-      error: err.message,
-      code: err.code
-    });
+  } catch (error) {
+    console.error('READ ALL error:', error);
+    res.status(500).json({ message: 'ไม่สามารถดึงรายการได้' });
   }
 });
 
@@ -53,13 +50,13 @@ router.get('/:id', async (req, res) => {
     }
 
     res.json({ data: task });
-  } catch (err) {
-    console.error('READ ONE error:', err);
+  } catch (error) {
+    console.error('READ ONE error:', error);
     res.status(500).json({ message: 'ไม่สามารถดึงข้อมูลได้' });
   }
 });
 
-// UPDATE (PATCH)
+// UPDATE
 router.patch('/:id', async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -73,10 +70,10 @@ router.patch('/:id', async (req, res) => {
     });
 
     res.json({ data: task });
-  } catch (err: any) {
-    console.error('UPDATE error:', err);
+  } catch (error: any) {
+    console.error('UPDATE error:', error);
 
-    if (err.code === 'P2025') {
+    if (error.code === 'P2025') {
       return res.status(404).json({ message: 'ไม่พบงานที่ต้องการอัปเดต' });
     }
 
@@ -92,10 +89,10 @@ router.delete('/:id', async (req, res) => {
     });
 
     res.json({ message: 'ลบงานสำเร็จ' });
-  } catch (err: any) {
-    console.error('DELETE error:', err);
+  } catch (error: any) {
+    console.error('DELETE error:', error);
 
-    if (err.code === 'P2025') {
+    if (error.code === 'P2025') {
       return res.status(404).json({ message: 'ไม่พบงานที่ต้องการลบ' });
     }
 
